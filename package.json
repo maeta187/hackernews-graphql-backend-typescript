@@ -6,7 +6,8 @@
   "type": "module",
   "scripts": {
     "start": "node --loader ts-node/esm ./src/server.ts",
-    "generate": "pnpx prisma generate"
+    "generate": "pnpx prisma generate",
+    "docker": "docker compose up"
   },
   "keywords": [],
   "author": "",
