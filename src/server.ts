@@ -7,12 +7,12 @@ import { startStandaloneServer } from '@apollo/server/standalone'
 
 let links = [
   {
-    id: '1',
+    id: '0',
     description: 'foo',
     url: 'foo'
   },
   {
-    id: '2',
+    id: '1',
     description: 'bar',
     url: 'bar'
   }
@@ -40,6 +40,10 @@ export const typeDefs = `#graphql
     books: [Book]
     feed: [Link]
   }
+
+  type Mutation {
+    post(url: String!, description: String!): Link!
+  }
 `
 const books = [
   {
@@ -56,6 +60,20 @@ const resolvers = {
   Query: {
     books: () => books,
     feed: () => links
+  },
+  Mutation: {
+    post: (_: undefined, args: { url: string; description: string }) => {
+      let idCount = links.length
+
+      const link = {
+        id: String(idCount++),
+        description: args.url,
+        url: args.url
+      }
+
+      links = [...links, link]
+      return link
+    }
   }
 }
 
