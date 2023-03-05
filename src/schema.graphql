@@ -12,6 +12,9 @@ type User {
   links: [Link!]!
 }
 
+type AuthPayload {
+  token: String
+  user: User
 }
 
 type Query {
