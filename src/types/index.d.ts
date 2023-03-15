@@ -11,3 +11,6 @@ export type SignupType = {
   password: string
   name: string
 }
+
+export type LoginType = Omit<SignupType, 'name'>
+
