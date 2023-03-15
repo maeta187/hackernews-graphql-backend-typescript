@@ -22,7 +22,7 @@ model Link {
 model User {
   id Int @id @default(autoincrement())
   name String
-  emil String @unique
+  email String @unique
   password String
   linls Link[]
 }
