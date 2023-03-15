@@ -15,6 +15,7 @@ async function signup(args: SignupType, context: MyContext) {
       password
     }
   })
+
   const token = jwt.sign({ userId: user.id }, APP_SECRET)
 
   return {
@@ -46,3 +47,21 @@ async function login(args: LoginType, context: MyContext) {
   }
 }
 
+// ニュースの投稿
+async function post(_: undefined, args: PostType, context: MyContext) {
+  const { userId } = context
+  if (!userId) {
+    throw new Error('ユーザー情報が取得できませんでした')
+  }
+  const newLink = await context.prisma.link.create({
+    data: {
+      url: args.url,
+      description: args.description,
+      postedBy: { connect: { id: Number(userId) } }
+    }
+  })
+
+  return newLink
+}
+
+export { signup, login, post }
