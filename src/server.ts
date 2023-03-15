@@ -4,6 +4,7 @@ import fs from 'fs'
 import path from 'path'
 import { fileURLToPath } from 'url'
 import { PrismaClient } from '@prisma/client'
+import { getUserId } from './utils.js'
 import { MyContext } from './types/index.js'
 
 const __filename = fileURLToPath(import.meta.url)
@@ -46,8 +47,9 @@ const server = new ApolloServer<MyContext>({
 //  3. prepares your app to handle incoming requests
 const { url } = await startStandaloneServer(server, {
   listen: { port: 4000 },
-  context: async () => ({
-    prisma
+  context: async ({ req }) => ({
+    prisma,
+    userId: req && req.headers.authorization ? getUserId(req) : null
   })
 })
 
