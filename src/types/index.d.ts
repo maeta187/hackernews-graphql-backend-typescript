@@ -14,3 +14,7 @@ export type SignupType = {
 
 export type LoginType = Omit<SignupType, 'name'>
 
+export type PostType = {
+  url: string
+  description: string
+}
