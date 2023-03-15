@@ -6,8 +6,8 @@
   "type": "module",
   "scripts": {
     "start": "node --loader ts-node/esm ./src/server.ts",
-    "generate": "pnpx prisma generate",
-    "studio": "pnpx prisma studio",
+    "generate": "pnpm exec prisma generate",
+    "studio": "pnpm exec prisma studio",
     "docker": "docker compose up"
   },
   "keywords": [],
