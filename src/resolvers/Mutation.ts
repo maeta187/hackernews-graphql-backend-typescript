@@ -1,6 +1,6 @@
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
-import { MyContext, SignupType } from '../types/index.js'
+import { MyContext, SignupType, LoginType, PostType } from '../types/index.js'
 
 const APP_SECRET = 'Graphql'
 
@@ -23,4 +23,26 @@ async function signup(args: SignupType, context: MyContext) {
   }
 }
 
-export { signup }
+// ユーザーログイン
+async function login(args: LoginType, context: MyContext) {
+  const user = await context.prisma.user.findUnique({
+    where: { email: args.email }
+  })
+  if (!user) {
+    throw new Error('ユーザーが見つかりませんでした。')
+  }
+
+  // パスワードの比較
+  const valid = await bcrypt.compare(args.password, user.password)
+  if (!valid) {
+    throw new Error('無効なパスワードです。')
+  }
+
+  const token = jwt.sign({ userId: user.id }, APP_SECRET)
+
+  return {
+    token,
+    user
+  }
+}
+
