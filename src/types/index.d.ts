@@ -1,9 +1,11 @@
 import { PrismaClient } from '@prisma/client'
 import { type } from 'os'
+import jwt from 'jsonwebtoken'
 
 export interface MyContext {
   // Context typing
   prisma: PrismaClient
+  userId: string | jwt.JwtPayload | null | undefined
 }
 
 export type SignupType = {
