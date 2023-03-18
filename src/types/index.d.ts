@@ -1,5 +1,4 @@
 import { PrismaClient } from '@prisma/client'
-import { type } from 'os'
 import jwt from 'jsonwebtoken'
 
 export interface MyContext {
@@ -28,3 +27,9 @@ export type LinkType = {
   postedBy: UserType
 }
 
+export type UserType = {
+  id: number
+  name: string
+  email: string
+  links: [LinkType]
+}
