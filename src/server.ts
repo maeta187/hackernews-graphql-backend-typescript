@@ -1,7 +1,11 @@
-import { ApolloServer } from '@apollo/server'
-import { startStandaloneServer } from '@apollo/server/standalone'
 import fs from 'fs'
 import path from 'path'
+import Query from './resolvers/Query.js'
+import Mutation from './resolvers/Mutation.js'
+import Link from './resolvers/Link.js'
+import User from './resolvers/User.js'
+import { ApolloServer } from '@apollo/server'
+import { startStandaloneServer } from '@apollo/server/standalone'
 import { fileURLToPath } from 'url'
 import { PrismaClient } from '@prisma/client'
 import { getUserId } from './utils.js'
@@ -11,28 +15,7 @@ const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 const prisma = new PrismaClient()
 
-const resolvers = {
-  Query: {
-    feed: async (_: undefined, __: undefined, context: MyContext) => {
-      return context.prisma.link.findMany()
-    }
-  },
-  Mutation: {
-    post: async (
-      _: undefined,
-      args: { url: string; description: string },
-      context: MyContext
-    ) => {
-      const newLink = await context.prisma.link.create({
-        data: {
-          url: args.url,
-          description: args.description
-        }
-      })
-      return newLink
-    }
-  }
-}
+const resolvers = { Query, Mutation, Link, User }
 
 // The ApolloServer constructor requires two parameters: your schema
 // definition and your set of resolvers.
@@ -48,8 +31,9 @@ const server = new ApolloServer<MyContext>({
 const { url } = await startStandaloneServer(server, {
   listen: { port: 4000 },
   context: async ({ req }) => ({
+    ...req,
     prisma,
-    userId: req && req.headers.authorization ? getUserId(req) : null
+    userId: req && req.headers.authorization ? getUserId(req) : undefined
   })
 })
 
