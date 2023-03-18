@@ -11,13 +11,11 @@ function getUserId(req: IncomingMessage) {
     const authHeader = req.headers.authorization
     // 権限があるなら
     if (authHeader) {
-      const token = authHeader.replace('Bearer', '')
-      if (!token) {
-        throw new Error('トークンが見つかりませんでした。')
-      }
       // トークンを複合する
-      const userId = getTokenPayload(token)
+      const userId = getTokenPayload(authHeader)
       return userId
+    } else {
+      throw new Error('トークンが見つかりませんでした。')
     }
   }
 }
@@ -28,4 +26,4 @@ function getTokenPayload(token: string) {
   return jwt.verify(token, APP_SECRET)
 }
 
-export { getUserId }
+export { getUserId, APP_SECRET }
