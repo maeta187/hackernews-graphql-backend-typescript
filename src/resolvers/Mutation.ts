@@ -1,11 +1,10 @@
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 import { MyContext, SignupType, LoginType, PostType } from '../types/index.js'
-
-const APP_SECRET = 'Graphql'
+import { APP_SECRET } from '../utils.js'
 
 //ユーザー新規登録リゾルバ
-async function signup(args: SignupType, context: MyContext) {
+async function signup(_: undefined, args: SignupType, context: MyContext) {
   const password = await bcrypt.hash(args.password, 10)
 
   // ユーザー新規作成
@@ -25,7 +24,7 @@ async function signup(args: SignupType, context: MyContext) {
 }
 
 // ユーザーログイン
-async function login(args: LoginType, context: MyContext) {
+async function login(_: undefined, args: LoginType, context: MyContext) {
   const user = await context.prisma.user.findUnique({
     where: { email: args.email }
   })
@@ -49,10 +48,12 @@ async function login(args: LoginType, context: MyContext) {
 
 // ニュースの投稿
 async function post(_: undefined, args: PostType, context: MyContext) {
-  const { userId } = context
-  if (!userId) {
+  const userIdObj = context.userId
+
+  if (!userIdObj || typeof userIdObj === 'string') {
     throw new Error('ユーザー情報が取得できませんでした')
   }
+  const { userId } = userIdObj
   const newLink = await context.prisma.link.create({
     data: {
       url: args.url,
@@ -64,4 +65,4 @@ async function post(_: undefined, args: PostType, context: MyContext) {
   return newLink
 }
 
-export { signup, login, post }
+export default { signup, login, post }
