@@ -20,3 +20,11 @@ export type PostType = {
   url: string
   description: string
 }
+
+export type LinkType = {
+  id: number
+  description: string
+  url: string
+  postedBy: UserType
+}
+
