@@ -6,8 +6,8 @@
   "type": "module",
   "scripts": {
     "start": "node --loader ts-node/esm ./src/server.ts",
-    "generate": "pnpx prisma generate",
-    "studio": "pnpx prisma studio",
+    "generate": "pnpm exec prisma generate",
+    "studio": "pnpm exec prisma studio",
     "docker": "docker compose up"
   },
   "keywords": [],
@@ -15,6 +15,8 @@
   "license": "ISC",
   "devDependencies": {
     "@apollo/server": "^4.4.0",
+    "@types/bcryptjs": "^2.4.2",
+    "@types/jsonwebtoken": "^9.0.1",
     "@types/node": "^18.14.0",
     "graphql": "^16.6.0",
     "prisma": "^4.10.1",
@@ -22,6 +24,8 @@
     "typescript": "^4.9.5"
   },
   "dependencies": {
-    "@prisma/client": "4.10.1"
+    "@prisma/client": "4.10.1",
+    "bcryptjs": "^2.4.3",
+    "jsonwebtoken": "^9.0.0"
   }
 }
