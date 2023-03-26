@@ -62,6 +62,9 @@ async function post(_: undefined, args: PostType, context: MyContext) {
     }
   })
 
+  // 送信
+  context.pubsub.publish('NEW_LINK', newLink)
+
   return newLink
 }
 

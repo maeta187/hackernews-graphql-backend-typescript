@@ -1,9 +1,11 @@
 import { PrismaClient } from '@prisma/client'
+import { PubSub } from 'graphql-subscriptions'
 import jwt from 'jsonwebtoken'
 
 export interface MyContext {
   // Context typing
   prisma: PrismaClient
+  pubsub: PubSub
   userId: string | jwt.JwtPayload | null | undefined
 }
 
