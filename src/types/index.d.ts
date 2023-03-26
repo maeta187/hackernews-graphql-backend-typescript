@@ -9,6 +9,11 @@ export interface MyContext {
   userId: string | jwt.JwtPayload | null | undefined
 }
 
+export interface MySubscribeContext {
+  // Context typing
+  pubsub: PubSub
+}
+
 export type SignupType = {
   email: string
   password: string

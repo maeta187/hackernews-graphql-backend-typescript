@@ -1,6 +1,6 @@
-import { MyContext, LinkType } from '../types/index.js'
+import { MySubscribeContext, LinkType } from '../types/index.js'
 
-function newLinkSubscribe(_: undefined, __: undefined, context: MyContext) {
+function newLinkSubscribe(_: any, __: any, context: MySubscribeContext) {
   return context.pubsub.asyncIterator('NEW_LINK')
 }
 
