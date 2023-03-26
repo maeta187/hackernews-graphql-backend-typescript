@@ -47,7 +47,19 @@ const wsServer = new WebSocketServer({
 
 // Hand in the schema we just created and have the
 // WebSocketServer start listening.
-const serverCleanup = useServer({ schema }, wsServer)
+const serverCleanup = useServer(
+  {
+    // Our GraphQL schema.
+    schema,
+    // Adding a context property lets you add data to your GraphQL operation contextValue
+    context: async (ctx, msg, args) => {
+      // You can define your own function for setting a dynamic context
+      // or provide a static value
+      return { pubsub }
+    }
+  },
+  wsServer
+)
 
 // The ApolloServer constructor requires two parameters: your schema
 // definition and your set of resolvers.
@@ -91,7 +103,14 @@ app.use(
   '/graphql',
   cors<cors.CorsRequest>(),
   bodyParser.json(),
-  expressMiddleware(server)
+  expressMiddleware(server, {
+    context: async ({ req }) => ({
+      ...req,
+      prisma,
+      pubsub,
+      userId: req && req.headers.authorization ? getUserId(req) : undefined
+    })
+  })
 )
 
 const PORT = 4000
