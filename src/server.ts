@@ -13,7 +13,6 @@ import Link from './resolvers/Link.js'
 import User from './resolvers/User.js'
 import { ApolloServer } from '@apollo/server'
 import { expressMiddleware } from '@apollo/server/express4'
-import { startStandaloneServer } from '@apollo/server/standalone'
 import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHttpServer'
 import { makeExecutableSchema } from '@graphql-tools/schema'
 import { PubSub } from 'graphql-subscriptions'
@@ -55,7 +54,7 @@ const serverCleanup = useServer(
     context: async (ctx, msg, args) => {
       // You can define your own function for setting a dynamic context
       // or provide a static value
-      return { pubsub }
+      return { pubsub, prisma }
     }
   },
   wsServer
