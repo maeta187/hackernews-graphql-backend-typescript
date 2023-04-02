@@ -11,6 +11,7 @@ import Mutation from './resolvers/Mutation.js'
 import Subscription from './resolvers/Subscription.js'
 import Link from './resolvers/Link.js'
 import User from './resolvers/User.js'
+import Vote from './resolvers/Vote.js'
 import { ApolloServer } from '@apollo/server'
 import { expressMiddleware } from '@apollo/server/express4'
 import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHttpServer'
@@ -30,7 +31,7 @@ const typeDefs = fs.readFileSync(
   path.join(__dirname, 'schema.graphql'),
   'utf-8'
 )
-const resolvers = { Query, Mutation, Subscription, Link, User }
+const resolvers = { Query, Mutation, Subscription, Link, User, Vote }
 const pubsub = new PubSub()
 
 const schema = makeExecutableSchema({ typeDefs, resolvers })
