@@ -40,3 +40,10 @@ export type UserType = {
   email: string
   links: [LinkType]
 }
+
+export type VoteType = {
+  id: number
+  links: [LinkType]
+  users: [User]
+}
+
