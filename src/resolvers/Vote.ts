@@ -8,3 +8,12 @@ function link(parent: LinkType, __: undefined, context: MyContext) {
     .link()
 }
 
+function user(parent: UserType, __: undefined, context: MyContext) {
+  return context.prisma.vote
+    .findUnique({
+      where: { id: parent.id }
+    })
+    .user()
+}
+
+export default { link, user }
