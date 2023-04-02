@@ -1,10 +1,17 @@
 import { PrismaClient } from '@prisma/client'
+import { PubSub } from 'graphql-subscriptions'
 import jwt from 'jsonwebtoken'
 
 export interface MyContext {
   // Context typing
   prisma: PrismaClient
+  pubsub: PubSub
   userId: string | jwt.JwtPayload | null | undefined
+}
+
+export interface MySubscribeContext {
+  // Context typing
+  pubsub: PubSub
 }
 
 export type SignupType = {
@@ -32,4 +39,14 @@ export type UserType = {
   name: string
   email: string
   links: [LinkType]
+}
+
+export type VoteType = {
+  id: number
+  links: [LinkType]
+  users: [User]
+}
+
+export type VoteArgsType = {
+  linkId: number | string
 }

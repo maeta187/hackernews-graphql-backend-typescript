@@ -1,6 +1,12 @@
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
-import { MyContext, SignupType, LoginType, PostType } from '../types/index.js'
+import {
+  MyContext,
+  SignupType,
+  LoginType,
+  PostType,
+  VoteArgsType
+} from '../types/index.js'
 import { APP_SECRET } from '../utils.js'
 
 //ユーザー新規登録リゾルバ
@@ -62,7 +68,44 @@ async function post(_: undefined, args: PostType, context: MyContext) {
     }
   })
 
+  // 送信
+  context.pubsub.publish('NEW_LINK', newLink)
+
   return newLink
 }
 
-export default { signup, login, post }
+async function vote(_: undefined, args: VoteArgsType, context: MyContext) {
+  const userIdObj = context.userId
+  if (!userIdObj || typeof userIdObj === 'string') {
+    throw new Error('ユーザー情報が取得できませんでした')
+  }
+  const { userId } = userIdObj
+
+  const vote = await context.prisma.vote.findUnique({
+    where: {
+      linkId_userId: {
+        linkId: Number(args.linkId),
+        userId: Number(userId)
+      }
+    }
+  })
+
+  // 2回投票を防ぐ
+  if (Boolean(vote)) {
+    throw new Error(`すでにその投稿には投票されています:${args.linkId}`)
+  }
+
+  // 投票する
+  const newVote = await context.prisma.vote.create({
+    data: {
+      user: { connect: { id: userId } },
+      link: { connect: { id: Number(args.linkId) } }
+    }
+  })
+
+  context.pubsub.publish('NEW_VOTE', newVote)
+
+  return newVote
+}
+
+export default { signup, login, post, vote }
