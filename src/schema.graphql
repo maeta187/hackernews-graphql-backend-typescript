@@ -17,6 +17,12 @@ type AuthPayload {
   user: User
 }
 
+type Vote {
+  id: ID!
+  link: Link!
+  user: User!
+}
+
 type Query {
   feed: [Link]
 }
