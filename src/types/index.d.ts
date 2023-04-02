@@ -47,3 +47,6 @@ export type VoteType = {
   users: [User]
 }
 
+export type VoteArgsType = {
+  linkId: number | string
+}
